@@ -1,0 +1,1606 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Escape The Factory</title>
+
+<style>
+
+/* =========================================================
+   RESET
+========================================================= */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    background: #020202;
+    color: white;
+    font-family: "Trebuchet MS", Arial, sans-serif;
+    overflow-x: hidden;
+}
+
+/* =========================================================
+   GLOBAL ATMOSPHERE
+========================================================= */
+
+body::before {
+    content: "";
+    position: fixed;
+    inset: -50%;
+    pointer-events: none;
+    z-index: 1000;
+
+    background:
+        radial-gradient(
+            circle at 20% 20%,
+            rgba(255, 0, 0, 0.16),
+            transparent 25%
+        ),
+        radial-gradient(
+            circle at 80% 70%,
+            rgba(0, 60, 255, 0.13),
+            transparent 25%
+        );
+
+    animation: atmosphereMove 12s ease-in-out infinite alternate;
+}
+
+body::after {
+    content: "";
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 999;
+
+    background:
+        repeating-linear-gradient(
+            0deg,
+            rgba(255,255,255,0.025) 0px,
+            rgba(255,255,255,0.025) 1px,
+            transparent 1px,
+            transparent 4px
+        );
+
+    animation: scanlines 0.15s linear infinite;
+}
+
+@keyframes atmosphereMove {
+    0% {
+        transform: translate(-3%, -3%) rotate(0deg) scale(1);
+    }
+
+    50% {
+        transform: translate(3%, 2%) rotate(3deg) scale(1.08);
+    }
+
+    100% {
+        transform: translate(-2%, 4%) rotate(-3deg) scale(1.15);
+    }
+}
+
+@keyframes scanlines {
+    from {
+        transform: translateY(0);
+    }
+
+    to {
+        transform: translateY(5px);
+    }
+}
+
+/* =========================================================
+   PARTICLES
+========================================================= */
+
+.particles {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 1;
+    overflow: hidden;
+}
+
+.particle {
+    position: absolute;
+    bottom: -20px;
+
+    width: 3px;
+    height: 3px;
+
+    border-radius: 50%;
+    background: #ff2222;
+
+    box-shadow:
+        0 0 6px #ff2222,
+        0 0 15px #ff0000;
+
+    animation: particleRise linear infinite;
+}
+
+.particle:nth-child(1) {
+    left: 5%;
+    animation-duration: 8s;
+    animation-delay: 0s;
+}
+
+.particle:nth-child(2) {
+    left: 15%;
+    animation-duration: 11s;
+    animation-delay: 2s;
+}
+
+.particle:nth-child(3) {
+    left: 25%;
+    animation-duration: 9s;
+    animation-delay: 4s;
+}
+
+.particle:nth-child(4) {
+    left: 35%;
+    animation-duration: 13s;
+    animation-delay: 1s;
+}
+
+.particle:nth-child(5) {
+    left: 45%;
+    animation-duration: 10s;
+    animation-delay: 5s;
+}
+
+.particle:nth-child(6) {
+    left: 55%;
+    animation-duration: 12s;
+    animation-delay: 3s;
+}
+
+.particle:nth-child(7) {
+    left: 65%;
+    animation-duration: 9s;
+    animation-delay: 6s;
+}
+
+.particle:nth-child(8) {
+    left: 75%;
+    animation-duration: 14s;
+    animation-delay: 2s;
+}
+
+.particle:nth-child(9) {
+    left: 85%;
+    animation-duration: 11s;
+    animation-delay: 7s;
+}
+
+.particle:nth-child(10) {
+    left: 95%;
+    animation-duration: 8s;
+    animation-delay: 3s;
+}
+
+@keyframes particleRise {
+
+    0% {
+        transform:
+            translate(0, 0)
+            scale(0);
+        opacity: 0;
+    }
+
+    10% {
+        opacity: 1;
+        transform: scale(1);
+    }
+
+    50% {
+        transform:
+            translate(50px, -50vh)
+            scale(1.5);
+    }
+
+    100% {
+        transform:
+            translate(-40px, -110vh)
+            scale(0);
+        opacity: 0;
+    }
+}
+
+/* =========================================================
+   HEADER
+========================================================= */
+
+header {
+    min-height: 100vh;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    text-align: center;
+
+    padding: 40px 20px;
+
+    position: relative;
+    overflow: hidden;
+
+    background:
+        linear-gradient(
+            rgba(0,0,0,0.55),
+            rgba(0,0,0,0.92)
+        ),
+        radial-gradient(
+            circle at center,
+            #3b0000,
+            #090000 40%,
+            #000 75%
+        );
+}
+
+/* Moving red light */
+
+header::before {
+    content: "";
+
+    position: absolute;
+
+    width: 700px;
+    height: 700px;
+
+    border-radius: 50%;
+
+    background:
+        radial-gradient(
+            circle,
+            rgba(255,0,0,0.25),
+            transparent 65%
+        );
+
+    animation: redCore 5s ease-in-out infinite;
+}
+
+/* Moving scan beam */
+
+header::after {
+    content: "";
+
+    position: absolute;
+
+    left: -20%;
+    top: -20%;
+
+    width: 140%;
+    height: 3px;
+
+    background:
+        linear-gradient(
+            90deg,
+            transparent,
+            #ff0000,
+            white,
+            #ff0000,
+            transparent
+        );
+
+    box-shadow:
+        0 0 10px #ff0000,
+        0 0 30px #ff0000;
+
+    opacity: 0.45;
+
+    animation: scanBeam 4s linear infinite;
+}
+
+@keyframes redCore {
+
+    0%,100% {
+        transform: scale(0.8);
+        opacity: 0.4;
+    }
+
+    50% {
+        transform: scale(1.3);
+        opacity: 1;
+    }
+}
+
+@keyframes scanBeam {
+
+    0% {
+        top: -10%;
+    }
+
+    100% {
+        top: 110%;
+    }
+}
+
+/* =========================================================
+   LOGO
+========================================================= */
+
+.logo {
+    position: relative;
+    z-index: 5;
+
+    font-family:
+        Impact,
+        Haettenschweiler,
+        "Arial Narrow Bold",
+        sans-serif;
+
+    font-size: clamp(50px, 9vw, 110px);
+
+    letter-spacing: 8px;
+
+    text-transform: uppercase;
+
+    animation:
+        logoEntrance 1.8s cubic-bezier(.17,.67,.3,1.3),
+        logoFloat 5s ease-in-out 2s infinite;
+}
+
+@keyframes logoEntrance {
+
+    0% {
+        opacity: 0;
+
+        transform:
+            scale(3)
+            translateY(-80px);
+
+        filter: blur(30px);
+
+        letter-spacing: 35px;
+    }
+
+    60% {
+        opacity: 1;
+
+        transform:
+            scale(0.92)
+            translateY(0);
+
+        filter: blur(0);
+    }
+
+    100% {
+        transform: scale(1);
+        letter-spacing: 8px;
+    }
+}
+
+@keyframes logoFloat {
+
+    0%,100% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-8px);
+    }
+}
+
+.escape {
+    color: #ff1717;
+
+    text-shadow:
+        0 0 5px #ff0000,
+        0 0 15px #ff0000,
+        0 0 35px #ff0000,
+        0 0 70px rgba(255,0,0,0.6);
+
+    animation: redGlitch 5s infinite;
+}
+
+.factory {
+    color: #267cff;
+
+    text-shadow:
+        0 0 5px #267cff,
+        0 0 15px #267cff,
+        0 0 35px #267cff,
+        0 0 70px rgba(38,124,255,0.5);
+
+    animation: blueGlitch 6s infinite;
+}
+
+/* RED GLITCH */
+
+@keyframes redGlitch {
+
+    0%,90%,100% {
+        transform: translateX(0);
+        opacity: 1;
+    }
+
+    91% {
+        transform: translateX(-8px);
+        text-shadow:
+            5px 0 #00f2ea,
+            -5px 0 #ff0000;
+    }
+
+    92% {
+        transform: translateX(7px);
+        opacity: 0.7;
+    }
+
+    93% {
+        transform: translateX(-3px);
+    }
+
+    94% {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+/* BLUE GLITCH */
+
+@keyframes blueGlitch {
+
+    0%,88%,100% {
+        transform: translateX(0);
+        opacity: 1;
+    }
+
+    89% {
+        transform: translateX(8px);
+        text-shadow:
+            -5px 0 #ff0000,
+            5px 0 #00f2ea;
+    }
+
+    90% {
+        transform: translateX(-6px);
+        opacity: 0.6;
+    }
+
+    91% {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+/* =========================================================
+   TAGLINE
+========================================================= */
+
+.tagline {
+    position: relative;
+    z-index: 5;
+
+    margin-top: 20px;
+
+    color: #888;
+
+    font-size: 18px;
+
+    letter-spacing: 5px;
+
+    text-transform: uppercase;
+
+    animation:
+        taglineEnter 1.5s 0.8s both,
+        taglineGlow 3s 3s infinite;
+}
+
+@keyframes taglineEnter {
+
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+        letter-spacing: 20px;
+        filter: blur(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+        letter-spacing: 5px;
+        filter: blur(0);
+    }
+}
+
+@keyframes taglineGlow {
+
+    0%,100% {
+        color: #777;
+    }
+
+    50% {
+        color: #ddd;
+        text-shadow: 0 0 15px rgba(255,255,255,0.4);
+    }
+}
+
+/* =========================================================
+   DISCORD BUTTON
+========================================================= */
+
+.discord-button {
+    position: relative;
+    z-index: 5;
+
+    margin-top: 45px;
+
+    padding: 20px 45px;
+
+    background: #5865f2;
+
+    color: white;
+
+    border: 2px solid #7289ff;
+
+    border-radius: 8px;
+
+    text-decoration: none;
+
+    font-size: 20px;
+
+    font-weight: bold;
+
+    letter-spacing: 2px;
+
+    overflow: hidden;
+
+    box-shadow:
+        0 0 15px rgba(88,101,242,0.8),
+        0 0 40px rgba(88,101,242,0.4);
+
+    animation:
+        buttonEnter 1.2s 1.2s both,
+        discordPulse 2.5s 3s infinite;
+
+    transition:
+        transform .3s ease,
+        background .3s ease,
+        box-shadow .3s ease;
+}
+
+/* Shine */
+
+.discord-button::before {
+    content: "";
+
+    position: absolute;
+
+    top: 0;
+    left: -120%;
+
+    width: 70%;
+    height: 100%;
+
+    background:
+        linear-gradient(
+            90deg,
+            transparent,
+            rgba(255,255,255,0.65),
+            transparent
+        );
+
+    transform: skewX(-25deg);
+
+    animation: buttonShine 3s infinite;
+}
+
+@keyframes buttonEnter {
+
+    from {
+        opacity: 0;
+        transform: translateY(60px) scale(.5);
+        filter: blur(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+        filter: blur(0);
+    }
+}
+
+@keyframes discordPulse {
+
+    0%,100% {
+        box-shadow:
+            0 0 15px rgba(88,101,242,.8),
+            0 0 40px rgba(88,101,242,.3);
+    }
+
+    50% {
+        box-shadow:
+            0 0 30px #5865f2,
+            0 0 80px rgba(88,101,242,.6);
+    }
+}
+
+@keyframes buttonShine {
+
+    0% {
+        left: -120%;
+    }
+
+    35%,100% {
+        left: 150%;
+    }
+}
+
+.discord-button:hover {
+
+    transform:
+        scale(1.12)
+        translateY(-6px);
+
+    background: #7289ff;
+
+    box-shadow:
+        0 0 30px #5865f2,
+        0 0 70px rgba(88,101,242,.8),
+        0 0 120px rgba(88,101,242,.35);
+}
+
+/* =========================================================
+   ENTER TEXT
+========================================================= */
+
+.enter-text {
+
+    position: relative;
+    z-index: 5;
+
+    margin-top: 15px;
+
+    color: #666;
+
+    font-size: 12px;
+
+    letter-spacing: 3px;
+
+    animation:
+        fadeUp 1s 1.7s both,
+        blink 3s 3s infinite;
+}
+
+@keyframes fadeUp {
+
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes blink {
+
+    0%,90%,100% {
+        opacity: 1;
+    }
+
+    93% {
+        opacity: .2;
+    }
+}
+
+/* =========================================================
+   SOCIALS
+========================================================= */
+
+.socials {
+
+    position: relative;
+    z-index: 5;
+
+    margin-top: 35px;
+
+    text-align: center;
+
+    animation: fadeUp 1s 2s both;
+}
+
+.socials-title {
+
+    color: #777;
+
+    font-size: 12px;
+
+    letter-spacing: 4px;
+
+    margin-bottom: 15px;
+
+    text-transform: uppercase;
+}
+
+.social-buttons {
+
+    display: flex;
+
+    justify-content: center;
+
+    gap: 15px;
+}
+
+.social-button {
+
+    display: inline-block;
+
+    padding: 12px 25px;
+
+    color: white;
+
+    text-decoration: none;
+
+    font-size: 15px;
+
+    font-weight: bold;
+
+    letter-spacing: 2px;
+
+    border: 1px solid #444;
+
+    border-radius: 6px;
+
+    transition: .3s ease;
+}
+
+.tiktok {
+
+    background: #080808;
+
+    border-color: #ff0050;
+
+    box-shadow:
+        0 0 10px rgba(255,0,80,.5),
+        0 0 25px rgba(0,242,234,.2);
+
+    animation: tiktokPulse 3s infinite;
+}
+
+@keyframes tiktokPulse {
+
+    0%,100% {
+        box-shadow:
+            0 0 10px rgba(255,0,80,.4),
+            0 0 25px rgba(0,242,234,.15);
+    }
+
+    50% {
+        box-shadow:
+            0 0 20px rgba(255,0,80,.8),
+            0 0 45px rgba(0,242,234,.4);
+    }
+}
+
+.tiktok:hover {
+
+    transform:
+        translateY(-8px)
+        scale(1.1)
+        rotate(-2deg);
+
+    background: #111;
+
+    border-color: #00f2ea;
+
+    box-shadow:
+        0 0 20px #ff0050,
+        0 0 40px #00f2ea,
+        0 0 80px rgba(255,0,80,.4);
+}
+
+/* =========================================================
+   SECTIONS
+========================================================= */
+
+section {
+
+    padding: 120px 20px;
+
+    text-align: center;
+
+    position: relative;
+
+    overflow: hidden;
+}
+
+section::before {
+
+    content: "";
+
+    position: absolute;
+
+    top: 0;
+    bottom: 0;
+
+    left: 50%;
+
+    width: 1px;
+
+    background:
+        linear-gradient(
+            transparent,
+            rgba(255,0,0,.5),
+            transparent
+        );
+
+    animation: energyLine 4s ease-in-out infinite;
+}
+
+@keyframes energyLine {
+
+    0%,100% {
+        opacity: .15;
+        transform: scaleY(.3);
+    }
+
+    50% {
+        opacity: 1;
+        transform: scaleY(1);
+    }
+}
+
+.section-title {
+
+    font-family:
+        Impact,
+        Haettenschweiler,
+        "Arial Narrow Bold",
+        sans-serif;
+
+    font-size: 50px;
+
+    letter-spacing: 5px;
+
+    text-transform: uppercase;
+
+    margin-bottom: 30px;
+
+    animation: titleAppear 1s both;
+}
+
+@keyframes titleAppear {
+
+    from {
+        opacity: 0;
+        transform:
+            translateY(50px)
+            scale(.8);
+
+        filter: blur(15px);
+    }
+
+    to {
+        opacity: 1;
+        transform:
+            translateY(0)
+            scale(1);
+
+        filter: blur(0);
+    }
+}
+
+/* =========================================================
+   DOWNLOAD
+========================================================= */
+
+.download-section {
+
+    background:
+        linear-gradient(
+            rgba(255,255,255,.97),
+            rgba(220,220,220,.97)
+        );
+
+    color: black;
+}
+
+.download-title {
+
+    color: black;
+
+    text-shadow:
+        2px 2px 0 #777,
+        0 0 20px rgba(0,0,0,.2);
+}
+
+.not-released {
+
+    max-width: 700px;
+
+    margin: auto;
+
+    font-size: 21px;
+
+    line-height: 1.8;
+
+    color: #222;
+
+    font-weight: bold;
+
+    animation: textAppear 1s .3s both;
+}
+
+@keyframes textAppear {
+
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.status {
+
+    display: inline-block;
+
+    margin-top: 25px;
+
+    padding: 10px 20px;
+
+    border: 2px solid #990000;
+
+    color: #990000;
+
+    font-weight: bold;
+
+    letter-spacing: 2px;
+
+    animation:
+        statusAppear 1s .7s both,
+        statusPulse 2s 2s infinite;
+}
+
+@keyframes statusAppear {
+
+    from {
+        opacity: 0;
+        transform: scale(.4);
+    }
+
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+@keyframes statusPulse {
+
+    0%,100% {
+        box-shadow: 0 0 0 transparent;
+    }
+
+    50% {
+        box-shadow:
+            0 0 20px rgba(153,0,0,.5),
+            inset 0 0 15px rgba(153,0,0,.1);
+    }
+}
+
+/* =========================================================
+   NEWS
+========================================================= */
+
+.news-section {
+
+    background:
+        radial-gradient(
+            circle at center,
+            rgba(80,50,0,.25),
+            #030303 65%
+        );
+}
+
+.news-title {
+
+    color: #ffd000;
+
+    text-shadow:
+        0 0 10px #ffd000,
+        0 0 30px rgba(255,208,0,.5);
+
+    animation:
+        titleAppear 1s both,
+        warningFlicker 4s 2s infinite;
+}
+
+@keyframes warningFlicker {
+
+    0%,94%,100% {
+        opacity: 1;
+    }
+
+    95% {
+        opacity: .2;
+    }
+
+    96% {
+        opacity: 1;
+    }
+
+    97% {
+        opacity: .4;
+    }
+}
+
+.news-box {
+
+    max-width: 900px;
+
+    margin: auto;
+
+    padding: 40px;
+
+    background: rgba(20,20,20,.9);
+
+    border: 1px solid #444;
+
+    border-left: 5px solid #ffd000;
+
+    box-shadow:
+        0 0 30px rgba(255,208,0,.08),
+        inset 0 0 30px rgba(255,208,0,.02);
+
+    text-align: left;
+
+    position: relative;
+
+    overflow: hidden;
+
+    animation: newsAppear 1.3s .4s both;
+}
+
+.news-box::before {
+
+    content: "";
+
+    position: absolute;
+
+    top: 0;
+    left: -100%;
+
+    width: 100%;
+    height: 100%;
+
+    background:
+        linear-gradient(
+            90deg,
+            transparent,
+            rgba(255,208,0,.08),
+            transparent
+        );
+
+    animation: newsSweep 5s infinite;
+}
+
+.news-box::after {
+
+    content: "SYSTEM ALERT";
+
+    position: absolute;
+
+    top: 15px;
+    right: 20px;
+
+    color: rgba(255,208,0,.35);
+
+    font-size: 10px;
+
+    letter-spacing: 3px;
+
+    animation: alertBlink 2s infinite;
+}
+
+@keyframes newsAppear {
+
+    from {
+        opacity: 0;
+        transform:
+            translateY(60px)
+            scale(.95);
+
+        filter: blur(12px);
+    }
+
+    to {
+        opacity: 1;
+        transform:
+            translateY(0)
+            scale(1);
+
+        filter: blur(0);
+    }
+}
+
+@keyframes newsSweep {
+
+    0% {
+        left: -100%;
+    }
+
+    35%,100% {
+        left: 100%;
+    }
+}
+
+@keyframes alertBlink {
+
+    0%,100% {
+        opacity: .2;
+    }
+
+    50% {
+        opacity: 1;
+    }
+}
+
+.news-box p {
+
+    color: #ddd;
+
+    font-size: 19px;
+
+    line-height: 1.9;
+}
+
+.green-text {
+
+    color: #21e66b;
+
+    text-shadow:
+        0 0 5px #21e66b,
+        0 0 15px rgba(33,230,107,.5);
+
+    animation: greenGlow 2s infinite;
+}
+
+.red-text {
+
+    color: #ff3333;
+
+    text-shadow:
+        0 0 5px #ff3333,
+        0 0 15px rgba(255,51,51,.5);
+
+    animation: redGlow 2s infinite;
+}
+
+.blue-text {
+
+    color: #358cff;
+
+    text-shadow:
+        0 0 5px #358cff,
+        0 0 15px rgba(53,140,255,.5);
+
+    animation: blueGlow 2s infinite;
+}
+
+@keyframes greenGlow {
+
+    0%,100% {
+        text-shadow: 0 0 5px #21e66b;
+    }
+
+    50% {
+        text-shadow:
+            0 0 10px #21e66b,
+            0 0 30px #21e66b;
+    }
+}
+
+@keyframes redGlow {
+
+    0%,100% {
+        text-shadow: 0 0 5px #ff3333;
+    }
+
+    50% {
+        text-shadow:
+            0 0 10px #ff3333,
+            0 0 30px #ff3333;
+    }
+}
+
+@keyframes blueGlow {
+
+    0%,100% {
+        text-shadow: 0 0 5px #358cff;
+    }
+
+    50% {
+        text-shadow:
+            0 0 10px #358cff,
+            0 0 30px #358cff;
+    }
+}
+
+/* =========================================================
+   FOOTER
+========================================================= */
+
+footer {
+
+    padding: 80px 20px;
+
+    text-align: center;
+
+    background: #000;
+
+    border-top: 1px solid #222;
+
+    position: relative;
+
+    overflow: hidden;
+}
+
+footer::before {
+
+    content: "";
+
+    position: absolute;
+
+    width: 600px;
+    height: 250px;
+
+    left: 50%;
+    top: -120px;
+
+    transform: translateX(-50%);
+
+    background:
+        radial-gradient(
+            ellipse,
+            rgba(255,0,0,.2),
+            transparent 70%
+        );
+
+    animation: footerGlow 4s infinite;
+}
+
+@keyframes footerGlow {
+
+    0%,100% {
+        opacity: .3;
+        transform:
+            translateX(-50%)
+            scale(.8);
+    }
+
+    50% {
+        opacity: 1;
+        transform:
+            translateX(-50%)
+            scale(1.3);
+    }
+}
+
+.footer-logo {
+
+    position: relative;
+    z-index: 2;
+
+    font-family:
+        Impact,
+        Haettenschweiler,
+        "Arial Narrow Bold",
+        sans-serif;
+
+    font-size: 65px;
+
+    letter-spacing: 8px;
+
+    color: white;
+
+    text-shadow:
+        0 0 10px #ff0000,
+        0 0 30px #0055ff,
+        0 0 60px rgba(255,0,0,.4);
+
+    animation:
+        footerFloat 4s ease-in-out infinite,
+        footerGlitch 8s infinite;
+}
+
+@keyframes footerFloat {
+
+    0%,100% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-5px);
+    }
+}
+
+@keyframes footerGlitch {
+
+    0%,94%,100% {
+        filter: none;
+    }
+
+    95% {
+        transform: skewX(7deg);
+
+        filter:
+            drop-shadow(6px 0 #ff0000)
+            drop-shadow(-6px 0 #0055ff);
+    }
+
+    96% {
+        transform: skewX(-5deg);
+    }
+
+    97% {
+        transform: skewX(0);
+        filter: none;
+    }
+}
+
+.copyright {
+
+    position: relative;
+    z-index: 2;
+
+    margin-top: 20px;
+
+    color: #444;
+
+    font-size: 13px;
+
+    letter-spacing: 2px;
+
+    animation: copyrightPulse 3s infinite alternate;
+}
+
+@keyframes copyrightPulse {
+
+    from {
+        color: #333;
+    }
+
+    to {
+        color: #666;
+    }
+}
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+@media (max-width: 600px) {
+
+    .logo {
+        letter-spacing: 3px;
+        font-size: clamp(42px, 12vw, 70px);
+    }
+
+    .section-title {
+        font-size: 35px;
+    }
+
+    .news-box {
+        padding: 25px;
+    }
+
+    .news-box p {
+        font-size: 16px;
+    }
+
+    .footer-logo {
+        font-size: 40px;
+        letter-spacing: 4px;
+    }
+
+    .discord-button {
+        padding: 17px 30px;
+        font-size: 17px;
+    }
+
+    .social-button {
+        padding: 11px 20px;
+        font-size: 13px;
+    }
+
+    .tagline {
+        font-size: 13px;
+        letter-spacing: 3px;
+    }
+}
+
+/* =========================================================
+   REDUCE MOTION ACCESSIBILITY
+========================================================= */
+
+@media (prefers-reduced-motion: reduce) {
+
+    *,
+    *::before,
+    *::after {
+        animation-duration: .01ms !important;
+        animation-iteration-count: 1 !important;
+        scroll-behavior: auto !important;
+    }
+}
+
+</style>
+</head>
+
+<body>
+
+<!-- PARTICLES -->
+
+<div class="particles">
+
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+
+</div>
+
+
+<!-- MAIN PAGE -->
+
+<header>
+
+    <div class="logo">
+
+        <span class="escape">
+            ESCAPE THE
+        </span>
+
+        <span class="factory">
+            FACTORY
+        </span>
+
+    </div>
+
+
+    <div class="tagline">
+        🎮 The factory is waiting...
+    </div>
+
+
+    <a
+        class="discord-button"
+        href="https://discord.gg/mzp88Ehaa"
+        target="_blank"
+    >
+        🎮 ENTER THE DISCORD
+    </a>
+
+
+    <div class="enter-text">
+        JOIN THE COMMUNITY
+    </div>
+
+
+    <div class="socials">
+
+        <div class="socials-title">
+            OUR SOCIALS
+        </div>
+
+        <div class="social-buttons">
+
+            <a
+                class="social-button tiktok"
+                href="https://www.tiktok.com/@poppytheoryy"
+                target="_blank"
+            >
+                🎵 TIKTOK
+            </a>
+
+        </div>
+
+    </div>
+
+</header>
+
+
+<!-- DOWNLOAD SECTION -->
+
+<section class="download-section">
+
+    <h2 class="section-title download-title">
+        DOWNLOAD
+    </h2>
+
+    <p class="not-released">
+
+        The game is currently under development.
+        Stay tuned for the official release.
+
+    </p>
+
+    <div class="status">
+        NOT RELEASED YET
+    </div>
+
+</section>
+
+
+<!-- NEWS SECTION -->
+
+<section class="news-section">
+
+    <h2 class="section-title news-title">
+        LATEST NEWS
+    </h2>
+
+    <div class="news-box">
+
+        <p>
+
+            <span class="green-text">
+                SYSTEM ONLINE.
+            </span>
+
+            <br><br>
+
+            The developers are working on the game right now..
+
+            <br>
+
+            The game has been confirmed its going to release in 2027-2028
+
+            <br><br>
+
+            <span class="red-text">
+                ESCAPE THE FACTORY GAME
+            </span>
+
+            <br><br>
+
+            <span class="blue-text">
+                Stay tuned, More information coming soon.
+            </span>
+
+        </p>
+
+    </div>
+
+</section>
+
+
+<!-- FOOTER -->
+
+<footer>
+
+    <div class="footer-logo">
+        ESCAPE THE FACTORY
+    </div>
+
+    <div class="copyright">
+        © 2026 ESCAPE THE FACTORY — ALL RIGHTS RESERVED
+    </div>
+
+</footer>
+
+
+</body>
+</html>
